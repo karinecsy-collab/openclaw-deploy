@@ -229,9 +229,15 @@
   <h1>给你的 Mac 装一个<br /><span>真正好用的 AI 助手</span></h1>
   <p>不用懂代码，不用看文档。下载文件，双击，然后就可以用了。</p>
   <p class="hero-sub">全自动安装 · 无需命令行 · 预装实用技能 · 可接飞书</p>
-  <a href="OpenClaw-Installer.pkg" download="OpenClaw-Installer.pkg" class="btn-primary">
-    ⬇️ &nbsp;点击下载安装包（Mac）
-  </a>
+  <a href="javascript:void(0)" onclick="
+  var a=document.createElement('a');
+  a.href='OpenClaw-Installer.pkg';
+  a.download='OpenClaw-Installer.pkg';
+  a.type='application/octet-stream';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+" class="btn-primary">⬇️ &nbsp;点击下载安装包（Mac）</a>
   <div class="install-note">
     下载后 <span>右键 → 打开</span> 即可运行 · 遇到问题找我<br/>
     <span style="color:#666;">如提示「无权限」，打开终端粘贴：</span>
