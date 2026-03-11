@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>给你装个 AI 助手 · Mac 一键安装</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #111111;
+      --border: #1e1e1e;
+      --blue: #00d4ff;
+      --purple: #7b61ff;
+      --green: #00ff94;
+      --text: #f0f0f0;
+      --muted: #888;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      font-size: 1.1rem; font-weight: 700;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-cta {
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      color: #000; font-weight: 700; padding: 10px 24px;
+      border-radius: 8px; font-size: 0.9rem; cursor: pointer;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 100px 24px 80px;
+      max-width: 780px; margin: 0 auto;
+    }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--green); color: var(--green);
+      font-size: 0.78rem; padding: 5px 14px;
+      border-radius: 100px; margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      font-weight: 800; line-height: 1.2; margin-bottom: 20px;
+    }
+    .hero h1 span {
+      background: linear-gradient(90deg, var(--blue), var(--purple), var(--green));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p { font-size: 1.1rem; color: var(--muted); max-width: 520px; margin: 0 auto 16px; }
+    .hero-sub { font-size: 0.95rem; color: var(--muted); margin-bottom: 48px !important; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      color: #000; font-weight: 800; padding: 18px 44px;
+      border-radius: 14px; font-size: 1.1rem; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 40px rgba(0,212,255,0.25);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 60px rgba(0,212,255,0.4); }
+
+    .install-note {
+      margin-top: 16px; color: var(--muted); font-size: 0.82rem;
+    }
+    .install-note span { color: var(--text); }
+
+    /* HOW */
+    section { padding: 80px 24px; }
+    .section-label {
+      text-align: center; color: var(--blue);
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 800; margin-bottom: 10px;
+    }
+    .section-sub {
+      text-align: center; color: var(--muted);
+      font-size: 0.95rem; max-width: 440px; margin: 0 auto 56px;
+    }
+    .steps {
+      display: flex; gap: 20px; max-width: 900px; margin: 0 auto; flex-wrap: wrap;
+    }
+    .step {
+      flex: 1; min-width: 200px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 24px;
+    }
+    .step-num {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem; margin-bottom: 16px;
+    }
+    .step:nth-child(1) .step-num { background: rgba(0,212,255,0.15); color: var(--blue); }
+    .step:nth-child(2) .step-num { background: rgba(123,97,255,0.15); color: var(--purple); }
+    .step:nth-child(3) .step-num { background: rgba(0,255,148,0.15); color: var(--green); }
+    .step:nth-child(4) .step-num { background: rgba(255,200,0,0.15); color: #ffc800; }
+    .step h3 { font-size: 1rem; margin-bottom: 8px; }
+    .step p { color: var(--muted); font-size: 0.88rem; }
+
+    /* SKILLS */
+    .skills-wrap {
+      max-width: 760px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+    }
+    .skill-tag {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 18px;
+      font-size: 0.88rem; display: flex; align-items: center; gap: 8px;
+    }
+    .skill-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+    /* PRICE */
+    .price-box {
+      max-width: 500px; margin: 0 auto;
+      background: var(--card); border: 1px solid transparent;
+      border-radius: 24px; padding: 48px 44px; text-align: center;
+      background-clip: padding-box;
+      position: relative;
+    }
+    .price-box::before {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--blue), var(--purple), var(--green));
+      z-index: -1;
+    }
+    .price-amount {
+      font-size: 5rem; font-weight: 900; line-height: 1;
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .price-unit { color: var(--muted); font-size: 1rem; margin-bottom: 8px; }
+    .price-or {
+      margin: 20px 0; color: var(--muted); font-size: 0.9rem;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .price-or::before, .price-or::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .price-meal {
+      font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;
+    }
+    .price-meal-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+    .price-includes {
+      list-style: none; text-align: left;
+      display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px;
+    }
+    .price-includes li {
+      display: flex; gap: 10px; font-size: 0.9rem; color: var(--muted);
+    }
+    .price-includes .check { color: var(--green); font-weight: 700; }
+
+    /* CONTACT */
+    .contact-box {
+      max-width: 680px; margin: 0 auto; text-align: center;
+      background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(123,97,255,0.06));
+      border: 1px solid rgba(123,97,255,0.25);
+      border-radius: 24px; padding: 60px 40px;
+    }
+    .contact-box h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin-bottom: 12px; }
+    .contact-box p { color: var(--muted); margin-bottom: 32px; }
+    .qr-wrap {
+      width: 160px; height: 160px;
+      background: white; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; overflow: hidden;
+      box-shadow: 0 0 40px rgba(0,212,255,0.2);
+    }
+    .qr-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .qr-placeholder {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: #aaa; font-size: 0.78rem; text-align: center; padding: 12px;
+    }
+    .qr-hint { color: var(--muted); font-size: 0.82rem; }
+
+    /* GLOW */
+    .glow {
+      position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(123,97,255,0.1) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    footer {
+      text-align: center; padding: 36px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+<div class="glow"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">✦ 给你装个 AI 助手</div>
+  <a href="#contact" class="nav-cta">联系我</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">🍎 仅支持 Mac · 双击安装 · 5 分钟搞定</div>
+  <h1>给你的 Mac 装一个<br /><span>真正好用的 AI 助手</span></h1>
+  <p>不用懂代码，不用看文档。下载文件，双击，然后就可以用了。</p>
+  <p class="hero-sub">接入顶级大模型 · 预装 10 个实用技能 · 可接飞书/微信/Telegram</p>
+  <a href="https://raw.githubusercontent.com/karinecsy/openclaw-deploy/main/install.command"
+     download="install-openclaw.command"
+     class="btn-primary">
+    ⬇️ &nbsp;点击下载安装包（Mac）
+  </a>
+  <div class="install-note">
+    下载后 <span>右键 → 打开</span> 即可运行 · 全程有提示 · 遇到问题找我
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" style="background: #0d0d0d;">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">四步装好，比你想象的简单</h2>
+  <p class="section-sub">全程图形界面提示，不需要懂任何命令行</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>下载安装文件</h3>
+      <p>点击上方按钮，下载一个 .command 文件到你的 Mac。</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>右键 → 打开</h3>
+      <p>右键点击文件，选择「打开」，允许终端运行（Mac 安全机制，放心）。</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>按提示填写</h3>
+      <p>选择 AI 模型，填入 API Key，选要接入的 IM 平台（或跳过）。</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>开始使用</h3>
+      <p>安装完成后浏览器自动打开控制台，你的 AI 助手已就绪 🎉</p>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section>
+  <div class="section-label">Included Skills</div>
+  <h2 class="section-title">预装 10 个技能，开箱即用</h2>
+  <p class="section-sub">装完就能直接用，不用再折腾</p>
+  <div class="skills-wrap">
+    <div class="skill-tag"><span class="dot"></span>🌤 实时天气</div>
+    <div class="skill-tag"><span class="dot"></span>🔍 联网搜索</div>
+    <div class="skill-tag"><span class="dot"></span>📄 文档解析 PDF/Word</div>
+    <div class="skill-tag"><span class="dot"></span>📊 生成 PPT</div>
+    <div class="skill-tag"><span class="dot"></span>📈 股票行情</div>
+    <div class="skill-tag"><span class="dot"></span>📝 飞书文档读写</div>
+    <div class="skill-tag"><span class="dot"></span>🌸 小红书搜索</div>
+    <div class="skill-tag"><span class="dot"></span>🧠 自我学习进化</div>
+    <div class="skill-tag"><span class="dot"></span>📚 知识库问答</div>
+    <div class="skill-tag"><span class="dot"></span>🖼 图片生成</div>
+  </div>
+</section>
+
+<!-- PRICE -->
+<section id="pricing" style="background: #0d0d0d;">
+  <div class="section-label">Pricing</div>
+  <h2 class="section-title">要多少钱？</h2>
+  <p class="section-sub" style="margin-bottom: 48px;">朋友价，不含服务器和 API Key 费用</p>
+  <div class="price-box">
+    <div class="price-amount">¥299</div>
+    <div class="price-unit">一次性 · 永久使用</div>
+    <ul class="price-includes">
+      <li><span class="check">✓</span> 帮你安装配置好全部环境</li>
+      <li><span class="check">✓</span> 预装 10 个常用技能</li>
+      <li><span class="check">✓</span> 帮你配好大模型 API</li>
+      <li><span class="check">✓</span> 接入飞书或微信（可选）</li>
+      <li><span class="check">✓</span> 出问题随时找我</li>
+    </ul>
+    <div class="price-or">或者</div>
+    <div class="price-meal">🍜 请我吃顿饭</div>
+    <div class="price-meal-sub">人均 150 以上的馆子我就帮你装，不讲价 😄</div>
+    <a href="#contact" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1rem; padding: 16px;">
+      👋 联系我来装
+    </a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-box">
+    <h2>找我来装 👋</h2>
+    <p>扫码加飞书，说一声「装 AI」，我来帮你搞定</p>
+    <div class="qr-wrap">
+      <img src="qrcode.png" alt="飞书二维码"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      />
+      <div class="qr-placeholder" style="display:none;">
+        <div style="font-size:2rem;margin-bottom:6px;">🔷</div>
+        飞书二维码<br/>（即将更新）
+      </div>
+    </div>
+    <div class="qr-hint">📱 飞书扫码 · 或搜索我的飞书账号</div>
+  </div>
+</section>
+
+<footer>
+  © 2025 · 帮朋友装 AI 助手 · 基于 OpenClaw 开源项目
+</footer>
+
+</body>
+</html>
