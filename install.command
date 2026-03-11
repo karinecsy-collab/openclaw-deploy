@@ -129,15 +129,14 @@ fi
 ok "模型配置完成：$MODEL_ID"
 
 # ─── 6. IM 渠道配置 ───────────────────────────────────
-step "配置 IM 渠道（可选）"
+step "配置飞书接入（可选）"
 echo ""
-echo "选择要接入的 IM 平台："
-echo "  1) 飞书 Feishu"
-echo "  2) Telegram"
-echo "  3) 暂时跳过（以后再配置）"
+echo -e "是否现在配置飞书？（需要先在 ${CYAN}https://open.feishu.cn${NC} 创建应用）"
+echo "  1) 是，现在配置飞书"
+echo "  2) 跳过，以后再配置"
 echo ""
-read -p "请输入序号 [1-3，默认3]: " IM_CHOICE
-IM_CHOICE=${IM_CHOICE:-3}
+read -p "请输入序号 [1-2，默认2]: " IM_CHOICE
+IM_CHOICE=${IM_CHOICE:-2}
 
 FEISHU_APP_ID=""
 FEISHU_APP_SECRET=""
@@ -146,20 +145,13 @@ TELEGRAM_TOKEN=""
 case $IM_CHOICE in
   1)
     echo ""
-    echo -e "请前往 ${CYAN}https://open.feishu.cn${NC} 创建应用并获取凭据"
     read -p "请输入飞书 App ID: " FEISHU_APP_ID
     read -sp "请输入飞书 App Secret: " FEISHU_APP_SECRET
     echo ""
     ok "飞书配置完成"
     ;;
   2)
-    echo ""
-    echo -e "请在 Telegram 中找 ${CYAN}@BotFather${NC} 创建 Bot 并获取 Token"
-    read -p "请输入 Telegram Bot Token: " TELEGRAM_TOKEN
-    ok "Telegram 配置完成"
-    ;;
-  3)
-    warn "跳过 IM 配置，稍后可手动运行 openclaw configure"
+    warn "跳过飞书配置，稍后可手动运行 openclaw configure"
     ;;
 esac
 
